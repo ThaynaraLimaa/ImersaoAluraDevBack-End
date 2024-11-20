@@ -1,4 +1,5 @@
 import express from "express"; 
+import routes from "./src/routes/postsRoutes.js";
 
 const posts = [
     {
@@ -29,26 +30,22 @@ const posts = [
 ]; // Array em memória 
 
 const app = express(); // app armazena a nossa aplição Express. Esta constante é usada para criar e definir rotas
+routes(app)
 
-app.use(express.json()); // app.use() é método do Express que permite que você adicione middleware na aplicação. 
-
+// incicia o servidor na porta 3000
 app.listen(3000, () => {
     console.log("Servidor escutando...");
-}); // 3000 = porta do servidor local 
-
-// Criar uma rota
-app.get("/posts", (req, res) => {
-    res.status(200).json(posts); 
 }); 
 
-function buscarPostPorId(id) {
-    return posts.findIndex((post) => { return post.id == Number(id)}) // coloquei find invés de findIndex 
-}
 
-app.get("/posts/:id", (req, res) => {
-    const index= buscarPostPorId(req.params.id); 
-    res.status(200).json(posts[index])
-})
+// function buscarPostPorId(id) {
+//     return posts.findIndex((post) => { return post.id == Number(id)}) // coloquei find invés de findIndex 
+// }
+
+// app.get("/posts/:id", (req, res) => {
+//     const index= buscarPostPorId(req.params.id); 
+//     res.status(200).json(posts[index])
+// })
 
 
 
