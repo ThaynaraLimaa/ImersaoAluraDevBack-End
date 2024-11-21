@@ -1,11 +1,31 @@
-import express from "express";
-import { listarPosts } from "../controllers/postsControllers.js";
+// Routers: Define as rotas da aplicação, ou seja, os endereços que podem ser acessados pelo cliente.
 
+import express from "express";
+import { listarPosts, postarNovoPost, uploadImagem } from "../controllers/postsControllers.js";
+import multer from "multer"
+
+// Configura o armazenamento do Multer para uploads de imagens
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/');
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    }
+})
+
+// Cria uma instância do middleware Multer
+const upload = multer({dest: "./uploads", storage})
+
+// Define as rotas 
 const routes = (app) => {
     app.use(express.json()); // permite que o servidor interprete requisições com o corpo no formato JSON
+ 
+    app.get("/posts", listarPosts); // Rota para buscar todos os posts
+    app.post("/posts", postarNovoPost); // rota para criar um post, chama a função controladora para criação de posts
 
-    // Rota para buscar todos os posts 
-    app.get("/posts", listarPosts);
+    // Rota para upload de imagens (assumindo uma única imagem chamada "imagem")
+    app.post("/upload", upload.single("imagem"), uploadImagem); // upload.single() para inicializar o Multer  
 }
 
 export default routes; 
