@@ -12,7 +12,7 @@ export async function listarPosts(req, res) {
 export async function postarNovoPost(req, res) {
     // req.body é o body da requisição 
     const novoPost = req.body; 
-    // tratamentos de exeções 
+    console.log(req.body)
     try {
         const postCriado = await criarPost(novoPost);
         res.status(200).json(postCriado); 
@@ -25,7 +25,7 @@ export async function postarNovoPost(req, res) {
 export async function uploadImagem(req, res) {
     const novoPost = {
         descricao: "",
-        imgaeUrl: req.file.originalname,
+        imgUrl: req.file.originalname,
         alt: "" 
     }
     try {
@@ -44,12 +44,11 @@ export async function atualizarNovoPost(req, res) {
     const urlImagem = `http://localhost:3000/${id}.png`; 
 
     try {
-         
-        const imagemBuffer = fs.readFileSync(`uploads/${id}.png`);
-        const descricao = await gerarDescricaoComGemini(imagemBuffer); 
+        const imgBuffer = fs.readFileSync(`uploads/${id}.png`);
+        const descricao = await gerarDescricaoComGemini(imgBuffer); 
 
         const postAtt = {
-            imgaeUrl: urlImagem,
+            imgUrl: urlImagem,
             descricao: descricao, 
             alt: req.body.alt
         };
